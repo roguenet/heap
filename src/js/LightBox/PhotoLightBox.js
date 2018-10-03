@@ -116,7 +116,7 @@ export default class PhotoLightBox extends Component {
         meta.description
       }</Description> }
       { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
-        Copyright &copy; { meta.copyright }
+        &copy; { meta.copyright }
       </Copyright> }
     </StyledLightBox>;
   }

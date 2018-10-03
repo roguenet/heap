@@ -14,7 +14,7 @@ const StyledLightBox = styled.div`
   transform-origin: center;
   border: 2px solid ${backgroundImageBorder};
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   background: ${lightBoxBackground};
   position: fixed;
   display: flex;
@@ -24,10 +24,18 @@ const StyledLightBox = styled.div`
   
   transition: filter ${animationDuration}ms ease-out, transform ${animationDuration}ms ease-out;
   
-  > :nth-child(2) {
-    padding-top: 4px;
+  > :first-child {
+    margin-bottom: 4px;
   }
   
+  > :last-child {
+    margin-bottom: 6px;
+  }
+  
+  > :last-child:first-child {
+    margin-bottom: 10px;
+  }
+ 
   ${({ displayState }) => displayState.lightBoxStyles}
 `;
 
