@@ -24,10 +24,6 @@ const StyledLightBox = styled.div`
   
   transition: filter ${animationDuration}ms ease-out, transform ${animationDuration}ms ease-out;
   
-  --rotation: ${({ rotation }) => rotation}deg;
-  --offsetX: ${({ offsetX }) => offsetX};
-  --offsetY: ${({ offsetY }) => offsetY};
-  
   ${({ displayState }) => displayState.lightBoxStyles}
 `;
 

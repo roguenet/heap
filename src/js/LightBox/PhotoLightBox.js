@@ -85,6 +85,11 @@ export default class PhotoLightBox extends Component {
       rotation={ rotation }
       offsetX={ offsetX }
       offsetY={ offsetY }
+      style={ {
+        '--rotation': `${rotation}deg`,
+        '--offsetX': offsetX,
+        '--offsetY': offsetY,
+      } }
     >
       <LightBoxImage
         srcSet={
