@@ -8,11 +8,16 @@
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { DisplayState } from '../DisplayState';
-import LightBoxImage from '../LightBoxImage';
+import LightBoxImage, { imageSize } from '../LightBoxImage';
 import { animationDuration } from '../styleConstants';
 import { Copyright, Description, Title } from '../Text';
 import StyledLightBox from './StyledLightBox';
+
+const CopyContainer = styled.div`
+  ${imageSize}
+`;
 
 export default class PhotoLightBox extends Component {
   static propTypes = {
@@ -111,13 +116,15 @@ export default class PhotoLightBox extends Component {
         sizes={ this.sizes() }
         style={ { display: 'none' } }
       /> }
-      { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
-      { meta.description && <Description className='heap-lightBoxDescription'>{
-        meta.description
-      }</Description> }
-      { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
-        &copy; { meta.copyright }
-      </Copyright> }
+      <CopyContainer imageWidth={ width } imageHeight={ height }>
+        { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
+        { meta.description && <Description className='heap-lightBoxDescription'>{
+          meta.description
+        }</Description> }
+        { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
+          &copy; { meta.copyright }
+        </Copyright> }
+      </CopyContainer>
     </StyledLightBox>;
   }
 }

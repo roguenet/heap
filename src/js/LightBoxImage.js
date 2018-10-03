@@ -10,22 +10,21 @@ import styled from 'styled-components';
 import { lightBoxBorder } from './styleConstants';
 
 const LIGHT_BOX_MARGIN = 300;
-const LIGHT_BOX_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`;
-const LIGHT_BOX_HEIGHT = `100vh - ${LIGHT_BOX_MARGIN}px`;
+const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`;
+const IMAGE_HEIGHT = `100vh - ${LIGHT_BOX_MARGIN}px`;
 
 // Size the image based on width or height depending on the aspect ratio of the image and the
 // aspect ratio of the browser window.
-const imageSize = ({ imageWidth, imageHeight }) => imageWidth > imageHeight ? `
-  width: calc(${LIGHT_BOX_WIDTH});
+export const imageSize = ({ imageWidth, imageHeight }) => imageWidth > imageHeight ? `
+  width: calc(${IMAGE_WIDTH});
   @media(min-aspect-ratio: ${imageWidth}/${imageHeight + LIGHT_BOX_MARGIN}) {
     width: auto;
-    height: calc(${LIGHT_BOX_HEIGHT});
+    width: calc((${IMAGE_HEIGHT}) * ${imageWidth / imageHeight});
   }
 ` : `
-  height: calc(${LIGHT_BOX_HEIGHT});
+  width: calc((${IMAGE_HEIGHT}) * ${imageWidth / imageHeight});
   @media(max-aspect-ratio: ${imageWidth + LIGHT_BOX_MARGIN}/${imageHeight}) {
-    height: auto;
-    width: calc(${LIGHT_BOX_WIDTH});
+    width: calc(${IMAGE_WIDTH});
   }
 `;
 
