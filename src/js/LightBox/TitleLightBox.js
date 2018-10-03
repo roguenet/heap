@@ -17,7 +17,6 @@ const StyledTitleBox = styled.div`
   max-width: 60vw;
   min-width: 40vw;
   max-height: 80vh;
-  min-height: 40vh;
   overflow-y: scroll;
   cursor: default;
   display: flex;
@@ -28,6 +27,10 @@ const StyledTitleBox = styled.div`
  
   .heap-lightBoxDescription {
     text-align: initial;
+  
+    > :last-child { 
+      margin-bottom: 0;
+    }
   }
 `;
 
