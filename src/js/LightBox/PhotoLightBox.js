@@ -104,14 +104,14 @@ export default class PhotoLightBox extends Component {
     >
       <LightBoxImage
         srcSet={
-          displayState === DisplayState.INACTIVE ? this.inactiveSrcSet() : this.fullSrcSet()
+          displayState === DisplayState.BACKGROUND ? this.inactiveSrcSet() : this.fullSrcSet()
         }
         sizes={ this.sizes() }
         imageWidth={ width }
         imageHeight={ height }
         style={ displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null }
       />
-      { displayState === DisplayState.INACTIVE && <img
+      { displayState === DisplayState.BACKGROUND && <img
         srcSet={ this.fullSrcSet() }
         sizes={ this.sizes() }
         style={ { display: 'none' } }

@@ -13,6 +13,11 @@ import { loadHeapJson } from '../JsonLoader';
 import LightBox from '../LightBox/index';
 import { baseBackground } from '../styleConstants';
 
+// The maximum number of images to display in the background. Limiting is useful for large
+// Heaps, for performance reason. Note: It's useful to keep this number set to a perfect square
+// for JsonLoader's bucket generation algorithm
+export const MAX_BACKGROUND = 36;
+
 const StyledHeap = styled.div`
   width: 100vw;
   height: 100vh;
@@ -106,10 +111,7 @@ export default class Heap extends Component {
       key={ desc.path }
       { ...desc }
       config={ this.state.config }
-      displayState={
-        index > currentIndex ? DisplayState.INACTIVE :
-          (index === currentIndex ? DisplayState.ACTIVE : DisplayState.HIDDEN)
-      }
+      displayState={ DisplayState.calculate(index, currentIndex) }
     />;
   };
 

@@ -4,12 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { MAX_BACKGROUND } from './Heap/Heap';
 
 const MAX_ROTATION = 60;
 const MIN_ROTATION = 20;
 
-function* generateBuckets(numImages) {
-  const maxPerSide = Math.floor(Math.sqrt(numImages));
+function* generateBuckets(numBuckets) {
+  const maxPerSide = Math.floor(Math.sqrt(numBuckets));
   const length = 1 / maxPerSide;
   for (let x = 0; x < maxPerSide; x++) {
     for (let y = 0; y < maxPerSide; y++) {
@@ -30,6 +31,7 @@ const randomInvert = value => Math.random() < 0.5 ? value : value * -1;
 
 export async function loadHeapJson(src) {
   const config = await (await fetch(src)).json();
+  const numBuckets = Math.min(config.cards.length -1, MAX_BACKGROUND);
   let buckets = [];
 
   return {
@@ -40,7 +42,7 @@ export async function loadHeapJson(src) {
         return { ...card, offsetX: 0, offsetY: 0, rotation: 0 };
       }
 
-      if (buckets.length === 0) buckets = [...generateBuckets(config.cards.length - 1)];
+      if (buckets.length === 0) buckets = [...generateBuckets(numBuckets)];
       const { minX, maxX, minY, maxY } = buckets.splice(Math.random() * buckets.length, 1)[0];
 
       return {
