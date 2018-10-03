@@ -24,6 +24,10 @@ const StyledLightBox = styled.div`
   
   transition: filter ${animationDuration}ms ease-out, transform ${animationDuration}ms ease-out;
   
+  > :nth-child(2) {
+    padding-top: 4px;
+  }
+  
   ${({ displayState }) => displayState.lightBoxStyles}
 `;
 

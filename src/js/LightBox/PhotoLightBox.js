@@ -5,18 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { DisplayState } from '../DisplayState';
 import LightBoxImage from '../LightBoxImage';
 import { animationDuration } from '../styleConstants';
-import { Description, Title } from '../Text';
+import { Copyright, Description, Title } from '../Text';
 import StyledLightBox from './StyledLightBox';
-
-const Shim = styled.div`
-  height: 6px;
-`;
 
 export default class PhotoLightBox extends Component {
   static propTypes = {
@@ -30,6 +26,10 @@ export default class PhotoLightBox extends Component {
       title: PropTypes.string,
       description: PropTypes.string,
       keywords: PropTypes.arrayOf(PropTypes.string),
+      copyright: PropTypes.string,
+    }).isRequired,
+    config: PropTypes.shape({
+      copyrightCovers: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     offsetX: PropTypes.number.isRequired,
     offsetY: PropTypes.number.isRequired,
@@ -43,6 +43,12 @@ export default class PhotoLightBox extends Component {
 
   get sources() {
     return this.props.sources;
+  }
+
+  get showCopyright() {
+    const { copyrightCovers = [] } = this.props.config;
+    const { copyright } = this.props.meta;
+    return !isEmpty(copyright) && !copyrightCovers.includes(copyright);
   }
 
   componentDidUpdate({ displayState }) {
@@ -105,11 +111,13 @@ export default class PhotoLightBox extends Component {
         sizes={ this.sizes() }
         style={ { display: 'none' } }
       /> }
-      { (meta.title || meta.description) && <Shim/> }
       { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
       { meta.description && <Description className='heap-lightBoxDescription'>{
         meta.description
       }</Description> }
+      { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
+        Copyright &copy; { meta.copyright }
+      </Copyright> }
     </StyledLightBox>;
   }
 }

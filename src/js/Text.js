@@ -16,3 +16,10 @@ export const Description = styled.div`
   font-size: 12px;
   text-align: center;
 `;
+
+export const Copyright = styled.div`
+  font-size: 8px;
+  position: relative;
+  bottom: -4px;
+  align-self: flex-start;
+`;

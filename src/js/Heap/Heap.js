@@ -105,6 +105,7 @@ export default class Heap extends Component {
     return <LightBox
       key={ desc.path }
       { ...desc }
+      config={ this.state.config }
       displayState={
         index > currentIndex ? DisplayState.INACTIVE :
           (index === currentIndex ? DisplayState.ACTIVE : DisplayState.HIDDEN)
