@@ -89,6 +89,11 @@ export default class PhotoLightBox extends Component {
   };
 
   render() {
+    if (this.props.sources == null) {
+      console.error('PhotoLightBox missing sources', this.props.path)
+      return null;
+    }
+
     const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props;
     const { removeHidden } = this.state;
     return <StyledLightBox
