@@ -58,10 +58,12 @@ export default class TitleLightBox extends Component {
     const { title, description, displayState, rotation, offsetX, offsetY } = this.props;
     return <StyledLightBox
       displayState={ displayState }
-      rotation={ rotation }
-      offsetX={ offsetX }
-      offsetY={ offsetY }
       onClick={ this.maybeSwallowEvent }
+      style={ {
+        '--rotation': `${rotation}deg`,
+        '--offsetX': offsetX,
+        '--offsetY': offsetY,
+      } }
     >
       <StyledTitleBox>
         <Title className='heap-lightBoxTitle'>{ title }</Title>

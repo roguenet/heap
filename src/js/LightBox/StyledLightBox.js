@@ -41,9 +41,6 @@ const StyledLightBox = styled.div`
 
 StyledLightBox.propTypes = {
   displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired,
-  rotation: PropTypes.number.isRequired,
-  offsetX: PropTypes.number.isRequired,
-  offsetY: PropTypes.number.isRequired,
 };
 
 export default StyledLightBox;
