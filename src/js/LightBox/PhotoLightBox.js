@@ -96,6 +96,7 @@ export default class PhotoLightBox extends Component {
 
     const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props;
     const { removeHidden } = this.state;
+    const inactive = [DisplayState.BACKGROUND, DisplayState.BURIED].includes(displayState);
     return <StyledLightBox
       displayState={ displayState }
       rotation={ rotation }
@@ -108,15 +109,13 @@ export default class PhotoLightBox extends Component {
       } }
     >
       <LightBoxImage
-        srcSet={
-          displayState === DisplayState.BACKGROUND ? this.inactiveSrcSet() : this.fullSrcSet()
-        }
+        srcSet={ inactive ? this.inactiveSrcSet() : this.fullSrcSet() }
         sizes={ this.sizes() }
         imageWidth={ width }
         imageHeight={ height }
         style={ displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null }
       />
-      { displayState === DisplayState.BACKGROUND && <img
+      { inactive && <img
         srcSet={ this.fullSrcSet() }
         sizes={ this.sizes() }
         style={ { display: 'none' } }
