@@ -99,9 +99,6 @@ export default class PhotoLightBox extends Component {
     const inactive = [DisplayState.BACKGROUND, DisplayState.BURIED].includes(displayState);
     return <StyledLightBox
       displayState={ displayState }
-      rotation={ rotation }
-      offsetX={ offsetX }
-      offsetY={ offsetY }
       style={ {
         '--rotation': `${rotation}deg`,
         '--offsetX': offsetX,
