@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { Log } from '../../../lib/Log';
 import PhotoLightBox from './PhotoLightBox';
 import TitleLightBox from './TitleLightBox';
 
@@ -15,7 +16,7 @@ const Index = props => {
   case 'title': return <TitleLightBox { ...props }/>;
 
   default:
-    console.error('Unrecognized card type!', props.cardType);
+    Log.error('Unrecognized card type!', props.cardType);
     return null;
   }
 };

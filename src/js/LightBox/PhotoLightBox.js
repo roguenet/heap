@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Log } from '../../../lib/Log';
 import { DisplayState } from '../DisplayState';
 import LightBoxImage, { imageSize } from '../LightBoxImage';
 import { animationDuration } from '../styleConstants';
@@ -90,7 +91,7 @@ export default class PhotoLightBox extends Component {
 
   render() {
     if (this.props.sources == null) {
-      console.error('PhotoLightBox missing sources', this.props.path)
+      Log.error('PhotoLightBox missing sources', this.props.path)
       return null;
     }
 
