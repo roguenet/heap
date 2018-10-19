@@ -7,9 +7,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const Yargs = require('yargs');
+const Yargs = require('yargs')
 
-async function run() {
+async function run () {
+  /* eslint-disable no-unused-expressions */
   // noinspection BadExpressionStatementJS
   Yargs
     .usage('$0 <cmd> [args]')
@@ -20,7 +21,7 @@ async function run() {
     .option('verbose', {
       alias: 'v',
       default: false,
-      boolean: true,
+      boolean: true
     })
     .option('config', {
       describe: 'Config file to use for selected command.',
@@ -29,15 +30,15 @@ async function run() {
 
     .command({
       command: '*',
-      handler(argv) {
-        console.info(`No valid command detected, try: ${argv.$0} --help`);
+      handler (argv) {
+        console.info(`No valid command detected, try: ${argv.$0} --help`)
       }
     })
 
     .demandCommand()
     .help()
     .wrap(80)
-    .argv;
+    .argv
 }
 
-run();
+run()

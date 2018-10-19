@@ -11,9 +11,11 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.2",
     "babel-plugin-styled-components": "^1.6.4",
     "clean-webpack-plugin": "^0.1.19",
+    "standard": "^12.0.1",
     "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.8",
@@ -44,5 +46,8 @@
   },
   "bin": {
     "heap-images": "./bin/heap-images.js"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }

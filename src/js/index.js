@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import HeapComponent from './Heap';
-import HelpDrawerComponent from './MaterialHelpDrawer';
+import HeapComponent from './Heap'
+import HelpDrawerComponent from './MaterialHelpDrawer'
 
-export const Heap = HeapComponent;
-export const MaterialHelpDrawer = HelpDrawerComponent;
+export const Heap = HeapComponent
+export const MaterialHelpDrawer = HelpDrawerComponent

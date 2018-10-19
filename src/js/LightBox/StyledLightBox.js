@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { DisplayState } from '../DisplayState';
-import { animationDuration, backgroundImageBorder, lightBoxBackground } from '../styleConstants';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { DisplayState } from '../DisplayState'
+import { animationDuration, backgroundImageBorder, lightBoxBackground } from '../styleConstants'
 
 const StyledLightBox = styled.div`
   transform-origin: center;
@@ -37,10 +37,10 @@ const StyledLightBox = styled.div`
   }
  
   ${({ displayState }) => displayState.lightBoxStyles}
-`;
+`
 
 StyledLightBox.propTypes = {
-  displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired,
-};
+  displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired
+}
 
-export default StyledLightBox;
+export default StyledLightBox

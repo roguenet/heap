@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import Remarkable from 'remarkable';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { DisplayState } from '../DisplayState';
-import { Description, Title } from '../Text';
-import StyledLightBox from './StyledLightBox';
+import Remarkable from 'remarkable'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import { DisplayState } from '../DisplayState'
+import { Description, Title } from '../Text'
+import StyledLightBox from './StyledLightBox'
 
 const StyledTitleBox = styled.div`
   max-width: 60vw;
@@ -32,13 +32,13 @@ const StyledTitleBox = styled.div`
       margin-bottom: 0;
     }
   }
-`;
+`
 
 const md = new Remarkable('full', {
   html: true,
   linkTarget: '_blank',
-  typographer: true,
-});
+  typographer: true
+})
 
 export default class TitleLightBox extends Component {
   static propTypes = {
@@ -47,23 +47,23 @@ export default class TitleLightBox extends Component {
     offsetX: PropTypes.number.isRequired,
     offsetY: PropTypes.number.isRequired,
     rotation: PropTypes.number.isRequired,
-    displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired,
+    displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired
   };
 
   maybeSwallowEvent = event => {
-    if (event.target.tagName === 'A') event.stopPropagation();
+    if (event.target.tagName === 'A') event.stopPropagation()
   };
 
-  render() {
-    const { title, description, displayState, rotation, offsetX, offsetY } = this.props;
+  render () {
+    const { title, description, displayState, rotation, offsetX, offsetY } = this.props
     return <StyledLightBox
-      displayState={ displayState }
-      onClick={ this.maybeSwallowEvent }
-      style={ {
+      displayState={displayState}
+      onClick={this.maybeSwallowEvent}
+      style={{
         '--rotation': `${rotation}deg`,
         '--offsetX': offsetX,
-        '--offsetY': offsetY,
-      } }
+        '--offsetY': offsetY
+      }}
     >
       <StyledTitleBox>
         <Title className='heap-lightBoxTitle'>{ title }</Title>
@@ -72,6 +72,6 @@ export default class TitleLightBox extends Component {
           dangerouslySetInnerHTML={{ __html: md.render(description) }}
         />
       </StyledTitleBox>
-    </StyledLightBox>;
+    </StyledLightBox>
   }
 }

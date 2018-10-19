@@ -5,32 +5,32 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import Button from '@material-ui/core/Button';
-import { createGenerateClassName } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import CloseIcon from '@material-ui/icons/Close';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import HelpIcon from '@material-ui/icons/HelpOutline';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import ArchiveDownloadIcon from '@material-ui/icons/PhotoLibraryOutlined';
-import ImageDownloadIcon from '@material-ui/icons/PhotoOutlined';
-import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
-import JssProvider from 'react-jss/lib/JssProvider';
-import styled from 'styled-components';
-import { drawerBackground, dropShadow, lightBoxBackground } from './styleConstants';
+import Button from '@material-ui/core/Button'
+import { createGenerateClassName } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import CloseIcon from '@material-ui/icons/Close'
+import FirstPageIcon from '@material-ui/icons/FirstPage'
+import HelpIcon from '@material-ui/icons/HelpOutline'
+import LastPageIcon from '@material-ui/icons/LastPage'
+import MoreIcon from '@material-ui/icons/MoreVert'
+import ArchiveDownloadIcon from '@material-ui/icons/PhotoLibraryOutlined'
+import ImageDownloadIcon from '@material-ui/icons/PhotoOutlined'
+import PropTypes from 'prop-types'
+import React, { Component, Fragment } from 'react'
+import JssProvider from 'react-jss/lib/JssProvider'
+import styled from 'styled-components'
+import { drawerBackground, dropShadow, lightBoxBackground } from './styleConstants'
 
 // A hack to prevent icons here and icons from our consumer to have clashing class names.
 // https://material-ui.com/customization/css-in-js/#creategenerateclassname-options-class-name-generator
-const generateClassName = createGenerateClassName({ productionPrefix: 'c', });
+const generateClassName = createGenerateClassName({ productionPrefix: 'c' })
 
 const Divider = styled.div`
   border-right: 1px solid black;
   margin: 4px;
-`;
+`
 
 const StyledControlDrawer = styled.div`
   position: fixed;
@@ -43,8 +43,8 @@ const StyledControlDrawer = styled.div`
   border-radius: 37px;
   
   transition: background 350ms ease-out;
-  background: ${ ({ active }) => active ? drawerBackground : 'none' };
-`;
+  background: ${({ active }) => active ? drawerBackground : 'none'};
+`
 
 const StyledHelpPanel = styled.div`
   position: fixed;
@@ -52,21 +52,21 @@ const StyledHelpPanel = styled.div`
   left: 0;
   top: 0;
   width: 500px;
-  padding: ${ ({ active }) => active ? '24px' : '10px' };
+  padding: ${({ active }) => active ? '24px' : '10px'};
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow: ${ ({ active }) => active ? `2px 2px 10px ${dropShadow}` : 'none' };
+  box-shadow: ${({ active }) => active ? `2px 2px 10px ${dropShadow}` : 'none'};
   background: ${lightBoxBackground};
   
   transition: background 350ms ease-out;
-  background: ${ ({ active }) => active ? 'white' : 'none' };
+  background: ${({ active }) => active ? 'white' : 'none'};
   
   .heap-lightBoxTitle {
     margin-top: 8px;
     text-align: center;
   }
-`;
+`
 
 const StyledButton = styled(Button)`
   && {
@@ -80,28 +80,28 @@ const StyledButton = styled(Button)`
       margin-right: 4px;
     }
   }
-`;
+`
 
 const DrawerButton = ({ disabled, onClick, children, tooltip, style }) => {
   const button = <StyledButton
-    disabled={ disabled }
-    variant="fab"
-    mini={ true }
-    onClick={ onClick }
-    style={ style }
+    disabled={disabled}
+    variant='fab'
+    mini
+    onClick={onClick}
+    style={style}
   >
     { children }
-  </StyledButton>;
+  </StyledButton>
 
-  return disabled || tooltip == null ? button : <Tooltip title={ tooltip }>{ button }</Tooltip>;
-};
+  return disabled || tooltip == null ? button : <Tooltip title={tooltip}>{ button }</Tooltip>
+}
 
 const InlineMoreIcon = styled(MoreIcon)`
   position: relative;
   top: 7px;
   border: 1px solid gray;
   border-radius: 16px;
-`;
+`
 
 const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
   <div className='heap-lightBoxTitle'>Welcome to Heap!</div>
@@ -116,7 +116,7 @@ const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
       <li>Click anywhere to advance to the next photo.</li>
       <li>Use the browser back button to go back to the previous photo.</li>
       <li>
-        Press the <InlineMoreIcon/> icon below to open a control drawer
+        Press the <InlineMoreIcon /> icon below to open a control drawer
         <ul>
           <li>The first set of buttons move forward and backward in the story you're viewing.</li>
           <li>
@@ -124,7 +124,7 @@ const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
             of hi-res originals!
           </li>
           { additionalControlsHelp && additionalControlsHelp.map(
-            (help, index) => <li key={ index }>{ help }</li>
+            (help, index) => <li key={index}>{ help }</li>
           ) }
         </ul>
       </li>
@@ -133,7 +133,7 @@ const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
   </div>
   <sub>Heap &copy; 2018 Nathan Curtis</sub>
   { imagesCopyright && <sub>All Images &copy; { imagesCopyright }</sub> }
-</Fragment>;
+</Fragment>
 
 export default class MaterialHelpDrawer extends Component {
   static propTypes = {
@@ -141,7 +141,7 @@ export default class MaterialHelpDrawer extends Component {
       first: PropTypes.func.isRequired,
       back: PropTypes.func.isRequired,
       forward: PropTypes.func.isRequired,
-      last: PropTypes.func.isRequired,
+      last: PropTypes.func.isRequired
     }).isRequired,
 
     cardContext: PropTypes.shape({
@@ -150,101 +150,101 @@ export default class MaterialHelpDrawer extends Component {
       }).isRequired,
       card: PropTypes.object,
       isFirst: PropTypes.bool,
-      isLast: PropTypes.bool,
+      isLast: PropTypes.bool
     }).isRequired,
 
     additionalControls: PropTypes.arrayOf(PropTypes.shape({
       onClick: PropTypes.func.isRequired,
-      icon: PropTypes.node.isRequired,
+      icon: PropTypes.node.isRequired
     })),
 
-    additionalControlsHelp: PropTypes.arrayOf(PropTypes.node),
+    additionalControlsHelp: PropTypes.arrayOf(PropTypes.node)
   };
 
   state = {
     controlsActive: true,
-    helpActive: false,
+    helpActive: false
   };
 
   swallowEvent = event => event.stopPropagation();
 
   toggleControlsActive = () => {
-    this.setState({ controlsActive: !this.state.controlsActive });
+    this.setState({ controlsActive: !this.state.controlsActive })
   };
 
   toggleHelpActive = () => {
-    this.setState({ helpActive: !this.state.helpActive });
+    this.setState({ helpActive: !this.state.helpActive })
   };
 
   downloadImage = () => {
-    const { card: { cardType, sources } } = this.props.cardContext;
-    if (cardType !== 'photo') return;
+    const { card: { cardType, sources } } = this.props.cardContext
+    if (cardType !== 'photo') return
 
-    window.location = sources[sources.length - 1].src;
+    window.location = sources[sources.length - 1].src
   };
 
   downloadArchive = () => {
-    const { config: { archiveUrl } } = this.props.cardContext;
-    window.location = archiveUrl;
+    const { config: { archiveUrl } } = this.props.cardContext
+    window.location = archiveUrl
   };
 
-  render() {
-    const { controlsActive, helpActive } = this.state;
+  render () {
+    const { controlsActive, helpActive } = this.state
     const {
       navigate: { first, back, forward, last },
       cardContext: { config, card, isFirst, isLast },
       additionalControls,
       additionalControlsHelp
-    } = this.props;
-    const isPhoto = card.cardType === 'photo';
+    } = this.props
+    const isPhoto = card.cardType === 'photo'
 
-    return <JssProvider generateClassName={ generateClassName }>
+    return <JssProvider generateClassName={generateClassName}>
       <Fragment>
-        <StyledHelpPanel active={ helpActive } onClick={ this.swallowEvent }>
+        <StyledHelpPanel active={helpActive} onClick={this.swallowEvent}>
           <DrawerButton
-            style={ { position: helpActive ? 'absolute' : null } }
-            onClick={ this.toggleHelpActive }
+            style={{ position: helpActive ? 'absolute' : null }}
+            onClick={this.toggleHelpActive}
           >
-            { helpActive ? <CloseIcon style={ { position: 'absolute' } }/> : <HelpIcon/> }
+            { helpActive ? <CloseIcon style={{ position: 'absolute' }} /> : <HelpIcon /> }
           </DrawerButton>
           { helpActive && <HelpPanel
-            imagesCopyright={ config.copyright }
-            additionalControlsHelp={ additionalControlsHelp }
+            imagesCopyright={config.copyright}
+            additionalControlsHelp={additionalControlsHelp}
           /> }
         </StyledHelpPanel>
-        <StyledControlDrawer active={ controlsActive } onClick={ this.swallowEvent }>
-          <DrawerButton tooltip='Toggle controls' onClick={ this.toggleControlsActive }>
-            <MoreIcon/>
+        <StyledControlDrawer active={controlsActive} onClick={this.swallowEvent}>
+          <DrawerButton tooltip='Toggle controls' onClick={this.toggleControlsActive}>
+            <MoreIcon />
           </DrawerButton>
           { controlsActive && <Fragment>
-            <Divider/>
-            <DrawerButton disabled={ isFirst } onClick={ first }><FirstPageIcon/></DrawerButton>
-            <DrawerButton disabled={ isFirst } onClick={ back }><ArrowBackIcon/></DrawerButton>
-            <DrawerButton disabled={ isLast } onClick={ forward }><ArrowForwardIcon/></DrawerButton>
-            <DrawerButton disabled={ isLast } onClick={ last }><LastPageIcon/></DrawerButton>
-            <Divider/>
+            <Divider />
+            <DrawerButton disabled={isFirst} onClick={first}><FirstPageIcon /></DrawerButton>
+            <DrawerButton disabled={isFirst} onClick={back}><ArrowBackIcon /></DrawerButton>
+            <DrawerButton disabled={isLast} onClick={forward}><ArrowForwardIcon /></DrawerButton>
+            <DrawerButton disabled={isLast} onClick={last}><LastPageIcon /></DrawerButton>
+            <Divider />
             <DrawerButton
-              disabled={ !isPhoto }
-              onClick={ this.downloadImage }
+              disabled={!isPhoto}
+              onClick={this.downloadImage}
               tooltip='Download this image'
             >
-              <ImageDownloadIcon/>
+              <ImageDownloadIcon />
             </DrawerButton>
             <DrawerButton
-              onClick={ this.downloadArchive }
+              onClick={this.downloadArchive}
               tooltip='Download entire archive'
-            ><ArchiveDownloadIcon/></DrawerButton>
+            ><ArchiveDownloadIcon /></DrawerButton>
             { additionalControls && <Fragment>
-              <Divider/>
+              <Divider />
               { additionalControls.map(({ onClick, icon, tooltip }, index) => <DrawerButton
-                key={ index }
-                onClick={ onClick }
-                tooltip={ tooltip }
+                key={index}
+                onClick={onClick}
+                tooltip={tooltip}
               >{ icon }</DrawerButton>) }
             </Fragment> }
           </Fragment> }
         </StyledControlDrawer>
       </Fragment>
-    </JssProvider>;
+    </JssProvider>
   }
 }

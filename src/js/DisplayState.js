@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { MAX_BACKGROUND } from './Heap/Heap';
-import { dropShadow, inactiveScale } from './styleConstants';
+import { MAX_BACKGROUND } from './Heap/Heap'
+import { dropShadow, inactiveScale } from './styleConstants'
 
 const BACKGROUND_TRANSFORM = `
   transform: 
@@ -16,22 +16,22 @@ const BACKGROUND_TRANSFORM = `
     )
     rotate(var(--rotation))
     scale(${inactiveScale});
-`;
+`
 
 const ACTIVE_BORDER = `
   border: none;
   border-radius: 4px;
   box-shadow: 2px 2px 10px ${dropShadow};
-`;
+`
 
-export const DisplayState = (name, props) => ({ name, ...props });
+export const DisplayState = (name, props) => ({ name, ...props })
 
 DisplayState.calculate = (index, currentIndex) => {
-  if (index === currentIndex) return DisplayState.ACTIVE;
-  else if (index < currentIndex) return DisplayState.HIDDEN;
-  else if ((index - currentIndex) > MAX_BACKGROUND) return DisplayState.BURIED;
-  else return DisplayState.BACKGROUND;
-};
+  if (index === currentIndex) return DisplayState.ACTIVE
+  else if (index < currentIndex) return DisplayState.HIDDEN
+  else if ((index - currentIndex) > MAX_BACKGROUND) return DisplayState.BURIED
+  else return DisplayState.BACKGROUND
+}
 
 Object.entries({
   BURIED: {
@@ -64,5 +64,6 @@ Object.entries({
       filter: grayscale(100%) brightness(80%) opacity(0%);
       ${ACTIVE_BORDER}
     `
-  },
-}).forEach(([name, props]) => DisplayState[name] = DisplayState(name, props));
+  }
+// eslint-disable-next-line no-return-assign
+}).forEach(([name, props]) => DisplayState[name] = DisplayState(name, props))

@@ -5,26 +5,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import isEmpty from 'lodash/isEmpty';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Log } from '../../../lib/Log';
-import { DisplayState } from '../DisplayState';
-import LightBoxImage, { imageSize } from '../LightBoxImage';
-import { animationDuration } from '../styleConstants';
-import { Copyright, Description, Title } from '../Text';
-import StyledLightBox from './StyledLightBox';
+import isEmpty from 'lodash/isEmpty'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import { Log } from '../../../lib/Log'
+import { DisplayState } from '../DisplayState'
+import LightBoxImage, { imageSize } from '../LightBoxImage'
+import { animationDuration } from '../styleConstants'
+import { Copyright, Description, Title } from '../Text'
+import StyledLightBox from './StyledLightBox'
 
 const CopyContainer = styled.div`
   ${imageSize}
-`;
+`
 
 export default class PhotoLightBox extends Component {
   static propTypes = {
     sources: PropTypes.arrayOf(PropTypes.shape({
       src: PropTypes.string.isRequired,
-      width: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired
     })).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
@@ -32,42 +32,42 @@ export default class PhotoLightBox extends Component {
       title: PropTypes.string,
       description: PropTypes.string,
       keywords: PropTypes.arrayOf(PropTypes.string),
-      copyright: PropTypes.string,
+      copyright: PropTypes.string
     }).isRequired,
     config: PropTypes.shape({
-      copyrightCovers: PropTypes.arrayOf(PropTypes.string),
+      copyrightCovers: PropTypes.arrayOf(PropTypes.string)
     }).isRequired,
     offsetX: PropTypes.number.isRequired,
     offsetY: PropTypes.number.isRequired,
     rotation: PropTypes.number.isRequired,
-    displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired,
+    displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired
   };
 
   state = {
-    removeHidden: true,
+    removeHidden: true
   };
 
-  get sources() {
-    return this.props.sources;
+  get sources () {
+    return this.props.sources
   }
 
-  get showCopyright() {
-    const { copyrightCovers = [] } = this.props.config;
-    const { copyright } = this.props.meta;
-    return !isEmpty(copyright) && !copyrightCovers.includes(copyright);
+  get showCopyright () {
+    const { copyrightCovers } = this.props.config
+    const { copyright } = this.props.meta
+    return !isEmpty(copyright) && !(copyrightCovers || []).includes(copyright)
   }
 
-  componentDidUpdate({ displayState }) {
+  componentDidUpdate ({ displayState }) {
     if (displayState !== this.props.displayState) {
-      this.setState({ removeHidden: false });
+      this.setState({ removeHidden: false })
       // This assumes this component never leaves the DOM.
       this.animationTimeout =
-        setTimeout(() => this.setState({ removeHidden: true }), animationDuration);
+        setTimeout(() => this.setState({ removeHidden: true }), animationDuration)
     }
   }
 
-  componentWillUnmount() {
-    if (this.animationTimeout != null) clearTimeout(this.animationTimeout);
+  componentWillUnmount () {
+    if (this.animationTimeout != null) clearTimeout(this.animationTimeout)
   }
 
   fullSrcSet = () => this.sources.map(({ src, width }) => `${src} ${width}w`).join(',');
@@ -75,9 +75,9 @@ export default class PhotoLightBox extends Component {
   inactiveSrcSet = () => `${this.sources[0].src} ${this.sources[0].width}w`;
 
   sizes = () => {
-    const { width, height } = this.props;
-    const boxWidth = 'calc(100vw - 300px)';
-    const boxHeight = `calc((100vh - 300px) * ${width / height})`;
+    const { width, height } = this.props
+    const boxWidth = 'calc(100vw - 300px)'
+    const boxHeight = `calc((100vh - 300px) * ${width / height})`
     // Tell the browser what size we expect the image to display at. Uses the same logic as
     // the imageSize() function in LightBoxImage.
     return width > height ? `
@@ -86,34 +86,34 @@ export default class PhotoLightBox extends Component {
     ` : `
       (min-aspect-ratio: ${width + 300}/${height}) ${boxHeight},
       ${boxWidth}
-    `;
+    `
   };
 
-  render() {
+  render () {
     if (this.props.sources == null) {
       Log.error('PhotoLightBox missing sources', this.props.path)
-      return null;
+      return null
     }
 
-    const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props;
-    const { removeHidden } = this.state;
-    const inactive = [DisplayState.BACKGROUND, DisplayState.BURIED].includes(displayState);
+    const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props
+    const { removeHidden } = this.state
+    const inactive = [DisplayState.BACKGROUND, DisplayState.BURIED].includes(displayState)
     return <StyledLightBox
-      displayState={ displayState }
-      style={ {
+      displayState={displayState}
+      style={{
         '--rotation': `${rotation}deg`,
         '--offsetX': offsetX,
-        '--offsetY': offsetY,
-      } }
+        '--offsetY': offsetY
+      }}
     >
       <LightBoxImage
-        srcSet={ inactive ? this.inactiveSrcSet() : this.fullSrcSet() }
-        sizes={ this.sizes() }
-        imageWidth={ width }
-        imageHeight={ height }
-        style={ displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null }
+        srcSet={inactive ? this.inactiveSrcSet() : this.fullSrcSet()}
+        sizes={this.sizes()}
+        imageWidth={width}
+        imageHeight={height}
+        style={displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null}
       />
-      <CopyContainer imageWidth={ width } imageHeight={ height }>
+      <CopyContainer imageWidth={width} imageHeight={height}>
         { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
         { meta.description && <Description className='heap-lightBoxDescription'>{
           meta.description
@@ -122,6 +122,6 @@ export default class PhotoLightBox extends Component {
           &copy; { meta.copyright }
         </Copyright> }
       </CopyContainer>
-    </StyledLightBox>;
+    </StyledLightBox>
   }
 }

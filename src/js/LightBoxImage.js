@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { lightBoxBorder } from './styleConstants';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { lightBoxBorder } from './styleConstants'
 
-const LIGHT_BOX_MARGIN = 300;
-const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`;
-const IMAGE_HEIGHT = `100vh - ${LIGHT_BOX_MARGIN}px`;
+const LIGHT_BOX_MARGIN = 300
+const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`
+const IMAGE_HEIGHT = `100vh - ${LIGHT_BOX_MARGIN}px`
 
 // Size the image based on width or height depending on the aspect ratio of the image and the
 // aspect ratio of the browser window.
@@ -26,18 +26,17 @@ export const imageSize = ({ imageWidth, imageHeight }) => imageWidth > imageHeig
   @media(max-aspect-ratio: ${imageWidth + LIGHT_BOX_MARGIN}/${imageHeight}) {
     width: calc(${IMAGE_WIDTH});
   }
-`;
+`
 
 const LightBoxImage = styled.img`
   border-radius: 4px;
   border: 1px solid ${lightBoxBorder};
   ${imageSize}
-`;
+`
 
 LightBoxImage.propTypes = {
   imageWidth: PropTypes.number.isRequired,
-  imageHeight: PropTypes.number.isRequired,
-};
+  imageHeight: PropTypes.number.isRequired
+}
 
-export default LightBoxImage;
-
+export default LightBoxImage
