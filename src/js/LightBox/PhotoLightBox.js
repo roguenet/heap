@@ -112,11 +112,6 @@ export default class PhotoLightBox extends Component {
         imageHeight={ height }
         style={ displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null }
       />
-      { inactive && <img
-        srcSet={ this.fullSrcSet() }
-        sizes={ this.sizes() }
-        style={ { display: 'none' } }
-      /> }
       <CopyContainer imageWidth={ width } imageHeight={ height }>
         { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
         { meta.description && <Description className='heap-lightBoxDescription'>{
