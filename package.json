@@ -49,5 +49,9 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roguenet/heap.git"
   }
 }
