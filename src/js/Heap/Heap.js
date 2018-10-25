@@ -9,9 +9,9 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
-import { loadHeapJson } from '../JsonLoader'
 import LightBox from '../LightBox/index'
 import { baseBackground } from '../styleConstants'
+import { processConfig } from './processConfig'
 
 // The maximum number of images to display in the background. Limiting is useful for large
 // Heaps, for performance reason. Note: It's useful to keep this number set to a perfect square
@@ -27,9 +27,42 @@ const StyledHeap = styled.div`
   justify-content: center;
 `
 
+export const HEAP_SHAPE = PropTypes.shape({
+  copyright: PropTypes.string,
+  copyrightCovers: PropTypes.arrayOf(PropTypes.string),
+  archiveUrl: PropTypes.string,
+  cards: PropTypes.arrayOf(PropTypes.oneOfType([
+    // photo card
+    PropTypes.exact({
+      cardType: PropTypes.oneOf(['photo']).isRequired,
+      path: PropTypes.string.isRequired,
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+      sources: PropTypes.arrayOf(PropTypes.exact({
+        src: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired
+      })),
+      meta: PropTypes.shape({
+        title: PropTypes.string,
+        description: PropTypes.string,
+        copyright: PropTypes.string
+      })
+    }),
+
+    // title card
+    PropTypes.exact({
+      cardType: PropTypes.oneOf(['title']).isRequired,
+      path: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string
+    })
+  ])).isRequired
+})
+
 export default class Heap extends Component {
   static propTypes = {
-    src: PropTypes.string.isRequired,
+    config: HEAP_SHAPE.isRequired,
+
     className: PropTypes.string,
 
     navigation: PropTypes.shape({
@@ -42,7 +75,8 @@ export default class Heap extends Component {
   };
 
   state = {
-    cards: null,
+    config: processConfig(this.props.config),
+
     navigator: {
       first: () => this.goToFirst(),
       back: () => this.goBack(),
@@ -60,19 +94,17 @@ export default class Heap extends Component {
   }
 
   componentDidMount () {
-    loadHeapJson(this.props.src).then(config => this.setState({ config }))
+    const { currentCardPath, navigation } = this.props
+    if (currentCardPath == null || !this.cardPathIsValid(currentCardPath)) {
+      navigation.replace(this.cards[0].path)
+    }
   }
 
-  componentDidUpdate ({ currentCardPath: previousCardPath }, { config: previousConfig }) {
-    const { currentCardPath } = this.props
-    const { config } = this.state
-    const configSet = previousConfig == null && config != null
+  componentDidUpdate ({ currentCardPath: previousCardPath }) {
+    const { currentCardPath, navigation } = this.props
     const pathChanged = currentCardPath !== previousCardPath
-    if (
-      (configSet || pathChanged) &&
-      (currentCardPath == null || !this.cardPathIsValid(currentCardPath))
-    ) {
-      this.props.navigation.replace(this.cards[0].path)
+    if (pathChanged && (currentCardPath == null || !this.cardPathIsValid(currentCardPath))) {
+      navigation.replace(this.cards[0].path)
     }
   }
 
@@ -118,7 +150,7 @@ export default class Heap extends Component {
   render () {
     const { currentCardPath, children } = this.props
     const { config, navigator } = this.state
-    if (config == null || !this.cardPathIsValid(currentCardPath)) return null
+    if (!this.cardPathIsValid(currentCardPath)) return null
 
     const currentIndex = this.currentIndex
     const cardContext = {

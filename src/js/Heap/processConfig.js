@@ -4,7 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { MAX_BACKGROUND } from './Heap/Heap'
+
+import { MAX_BACKGROUND } from './Heap'
 
 const MAX_ROTATION = 60
 const MIN_ROTATION = 20
@@ -29,8 +30,7 @@ function * generateBuckets (numBuckets) {
 const randomInRange = (min, max) => Math.random() * (max - min) + min
 const randomInvert = value => Math.random() < 0.5 ? value : value * -1
 
-export async function loadHeapJson (src) {
-  const config = await (await window.fetch(src)).json()
+export function processConfig (config) {
   const numBuckets = Math.min(config.cards.length - 1, MAX_BACKGROUND)
   let buckets = []
 

@@ -42,6 +42,11 @@ export default class Navigation extends Component {
 
   componentDidMount () {
     this.unlisten = this.history.listen(this.onHistoryChange)
+
+    // Our child component can do a push or replace onMount, so our listener above might get
+    // registered too late to hear about the first update.
+    const currentCardPath = getCurrentCardPath(this.history.location.pathname)
+    if (currentCardPath !== this.state.currentCardPath) this.setState({ currentCardPath })
   }
 
   componentWillUnmount () {
@@ -50,7 +55,7 @@ export default class Navigation extends Component {
 
   onHistoryChange = ({ pathname }) => this.setState({
     currentCardPath: getCurrentCardPath(pathname)
-  });
+  })
 
   render () {
     const { children } = this.props
