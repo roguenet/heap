@@ -18,7 +18,6 @@ const IMAGE_HEIGHT = `100vh - ${LIGHT_BOX_MARGIN}px`
 export const imageSize = ({ imageWidth, imageHeight }) => imageWidth > imageHeight ? `
   width: calc(${IMAGE_WIDTH});
   @media(min-aspect-ratio: ${imageWidth}/${imageHeight + LIGHT_BOX_MARGIN}) {
-    width: auto;
     width: calc((${IMAGE_HEIGHT}) * ${imageWidth / imageHeight});
   }
 ` : `
