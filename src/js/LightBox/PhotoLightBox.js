@@ -96,7 +96,8 @@ export default class PhotoLightBox extends Component {
 
     const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props
     const { removeHidden } = this.state
-    const inactive = [DisplayState.BACKGROUND, DisplayState.BURIED].includes(displayState)
+    const buried = displayState === DisplayState.BURIED
+    const inactive = displayState === DisplayState.BACKGROUND
     return <StyledLightBox
       displayState={displayState}
       style={{
@@ -105,13 +106,13 @@ export default class PhotoLightBox extends Component {
         '--offsetY': offsetY
       }}
     >
-      <LightBoxImage
+      { !buried && <LightBoxImage
         srcSet={inactive ? this.inactiveSrcSet() : this.fullSrcSet()}
         sizes={this.sizes()}
         imageWidth={width}
         imageHeight={height}
         style={displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null}
-      />
+      /> }
       <CopyContainer imageWidth={width} imageHeight={height}>
         { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
         { meta.description && <Description className='heap-lightBoxDescription'>{
