@@ -10,9 +10,10 @@ import { dropShadow, inactiveScale } from './styleConstants'
 
 const BACKGROUND_TRANSFORM = `
   transform: 
-    translate(
+    translate3D(
       calc(var(--offsetX) * 100vw),
-      calc(var(--offsetY) * 100vh)
+      calc(var(--offsetY) * 100vh),
+      0
     )
     rotate(var(--rotation))
     scale(${inactiveScale});
@@ -37,32 +38,39 @@ Object.entries({
   BURIED: {
     lightBoxStyles: `
       ${BACKGROUND_TRANSFORM}
-      filter: grayscale(100%) brightness(80%) opacity(0%);
-      pointer-events: none;
-    `
+      display: none;
+    `,
+    previewStyles: ``
   },
 
   BACKGROUND: {
     lightBoxStyles: `
       ${BACKGROUND_TRANSFORM}
-      filter: grayscale(100%) brightness(80%) opacity(100%);
+    `,
+    previewStyles: `
+      opacity: 100;
     `
   },
 
   ACTIVE: {
     lightBoxStyles: `
-      transform: none;
-      filter: grayscale(0%) brightness(100%) opacity(100%);
+      transform: translate3D(0, 0, 0);
       ${ACTIVE_BORDER}
+    `,
+    previewStyles: `
+      opacity: 0;
     `
   },
 
   HIDDEN: {
     lightBoxStyles: `
       pointer-events: none;
-      transform: none;
-      filter: grayscale(100%) brightness(80%) opacity(0%);
+      transform: translate3D(0, 0, 0);
+      opacity: 0;
       ${ACTIVE_BORDER}
+    `,
+    previewStyles: `
+      opacity: 100;
     `
   }
 // eslint-disable-next-line no-return-assign

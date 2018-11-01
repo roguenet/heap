@@ -10,13 +10,12 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
-import LightBoxImage, { imageSize } from '../LightBoxImage'
-import { animationDuration } from '../styleConstants'
+import LightBoxImage, { copySize } from '../LightBoxImage'
 import { Copyright, Description, Title } from '../Text'
 import StyledLightBox from './StyledLightBox'
 
 const CopyContainer = styled.div`
-  ${imageSize}
+  ${copySize}
 `
 
 export default class PhotoLightBox extends Component {
@@ -27,6 +26,7 @@ export default class PhotoLightBox extends Component {
     })).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    preview: PropTypes.string,
     meta: PropTypes.shape({
       title: PropTypes.string,
       description: PropTypes.string,
@@ -42,10 +42,6 @@ export default class PhotoLightBox extends Component {
     displayState: PropTypes.oneOf(Object.values(DisplayState)).isRequired
   };
 
-  state = {
-    removeHidden: true
-  };
-
   get sources () {
     return this.props.sources
   }
@@ -56,22 +52,7 @@ export default class PhotoLightBox extends Component {
     return !isEmpty(copyright) && !(copyrightCovers || []).includes(copyright)
   }
 
-  componentDidUpdate ({ displayState }) {
-    if (displayState !== this.props.displayState) {
-      this.setState({ removeHidden: false })
-      // This assumes this component never leaves the DOM.
-      this.animationTimeout =
-        setTimeout(() => this.setState({ removeHidden: true }), animationDuration)
-    }
-  }
-
-  componentWillUnmount () {
-    if (this.animationTimeout != null) clearTimeout(this.animationTimeout)
-  }
-
   fullSrcSet = () => this.sources.map(({ src, width }) => `${src} ${width}w`).join(',');
-
-  inactiveSrcSet = () => `${this.sources[0].src} ${this.sources[0].width}w`;
 
   sizes = () => {
     const { width, height } = this.props
@@ -94,10 +75,8 @@ export default class PhotoLightBox extends Component {
       return null
     }
 
-    const { width, height, displayState, meta, rotation, offsetX, offsetY } = this.props
-    const { removeHidden } = this.state
+    const { width, height, preview, displayState, meta, rotation, offsetX, offsetY } = this.props
     const buried = displayState === DisplayState.BURIED
-    const inactive = displayState === DisplayState.BACKGROUND
     return <StyledLightBox
       displayState={displayState}
       style={{
@@ -107,11 +86,12 @@ export default class PhotoLightBox extends Component {
       }}
     >
       { !buried && <LightBoxImage
-        srcSet={inactive ? this.inactiveSrcSet() : this.fullSrcSet()}
+        displayState={displayState}
+        srcSet={this.fullSrcSet()}
         sizes={this.sizes()}
         imageWidth={width}
         imageHeight={height}
-        style={displayState === DisplayState.HIDDEN && removeHidden ? { display: 'none' } : null}
+        preview={preview}
       /> }
       <CopyContainer imageWidth={width} imageHeight={height}>
         { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }

@@ -38,6 +38,7 @@ export const HEAP_SHAPE = PropTypes.shape({
       path: PropTypes.string.isRequired,
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
+      preview: PropTypes.string,
       sources: PropTypes.arrayOf(PropTypes.exact({
         src: PropTypes.string.isRequired,
         width: PropTypes.number.isRequired

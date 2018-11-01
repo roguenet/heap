@@ -22,7 +22,9 @@ const StyledLightBox = styled.div`
   box-sizing: border-box;
   align-items: center;
   
-  transition: filter ${animationDuration}ms ease-out, transform ${animationDuration}ms ease-out;
+  transition: 
+    opacity ${animationDuration}ms ease-in-out, 
+    transform ${animationDuration}ms ease-in-out;
   
   > :first-child {
     margin-bottom: 4px;

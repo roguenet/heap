@@ -1,0 +1,55 @@
+/**
+ * Copyright (c) 2018 Nathan Curtis
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
+
+// simple SVG loading icon found on codepen: https://codepen.io/supah/pen/BjYLdW
+
+const rotate = keyframes`
+  100% {
+    transform: rotate(360deg);
+  }
+`
+
+const dash = keyframes`
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+`
+
+const StyledLoading = styled.svg`
+  animation: ${rotate} 2s linear infinite;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  width: 50px;
+  height: 50px;
+  
+  .path {
+    stroke: #81b4b3;
+    stroke-linecap: round;
+    animation: ${dash} 1.5s ease-in-out infinite;
+  }
+`
+
+const Loading = ({ style }) => <StyledLoading viewBox='0 0 50 50' style={style}>
+  <circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='5' />
+</StyledLoading>
+
+export default Loading
