@@ -6,6 +6,7 @@
  */
 
 import { MAX_BACKGROUND } from './Heap'
+import shuffle from 'lodash/shuffle'
 
 const MAX_ROTATION = 60
 const MIN_ROTATION = 20
@@ -30,27 +31,46 @@ function * generateBuckets (numBuckets) {
 const randomInRange = (min, max) => Math.random() * (max - min) + min
 const randomInvert = value => Math.random() < 0.5 ? value : value * -1
 
-export function processConfig (config) {
-  const numBuckets = Math.min(config.cards.length - 1, MAX_BACKGROUND)
+const positionCard = (card, minX, maxX, minY, maxY) => ({
+  ...card,
+  offsetX: randomInRange(minX, maxX),
+  offsetY: randomInRange(minY, maxY),
+  rotation: randomInvert(randomInRange(MIN_ROTATION, MAX_ROTATION))
+})
+
+const storyModeCards = cards => {
+  const numBuckets = Math.min(cards.length - 1, MAX_BACKGROUND)
   let buckets = []
 
-  return {
-    ...config,
-    cards: config.cards.map((card, index) => {
-      if (index === 0) {
-        // The first card is never displayed minimized so don't let it take up a bucket
-        return { ...card, offsetX: 0, offsetY: 0, rotation: 0 }
-      }
+  return cards.map((card, index) => {
+    if (index === 0) {
+      // The first card is never displayed minimized so don't let it take up a bucket
+      return { ...card, offsetX: 0, offsetY: 0, rotation: 0 }
+    }
 
-      if (buckets.length === 0) buckets = [...generateBuckets(numBuckets)]
-      const { minX, maxX, minY, maxY } = buckets.splice(Math.random() * buckets.length, 1)[0]
+    if (buckets.length === 0) buckets = [...generateBuckets(numBuckets)]
+    const { minX, maxX, minY, maxY } = buckets.splice(Math.random() * buckets.length, 1)[0]
 
-      return {
-        ...card,
-        offsetX: randomInRange(minX, maxX),
-        offsetY: randomInRange(minY, maxY),
-        rotation: randomInvert(randomInRange(MIN_ROTATION, MAX_ROTATION))
-      }
-    })
+    return positionCard(card, minX, maxX, minY, maxY)
+  })
+}
+
+export const screensaverModeCards = (cards, iteration = 0) =>
+  // for screensaver mode, we use the same placement algorithm as story mode, but we don't show
+  // any title cards and the order is scrambled
+  storyModeCards(shuffle(cards.filter(({ cardType }) => cardType === 'photo'))).map(
+    card => ({ ...card, path: `${card.path}${iteration}` })
+  )
+
+const cardsForMode = (mode, cards) => {
+  switch (mode) {
+    case 'screensaver': return screensaverModeCards(cards)
+    case 'story':
+    default:
+      return storyModeCards(cards)
   }
+}
+
+export function processConfig (config, mode) {
+  return { ...config, cards: cardsForMode(mode, config.cards) }
 }

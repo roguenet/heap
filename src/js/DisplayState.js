@@ -6,9 +6,9 @@
  */
 
 import { MAX_BACKGROUND } from './Heap/Heap'
-import { dropShadow, inactiveScale } from './styleConstants'
+import { css } from 'styled-components'
 
-const BACKGROUND_TRANSFORM = `
+const BACKGROUND_TRANSFORM = css`
   transform: 
     translate3d(
       calc(var(--offsetX) * 100vw),
@@ -16,13 +16,13 @@ const BACKGROUND_TRANSFORM = `
       0
     )
     rotate(var(--rotation))
-    scale(${inactiveScale});
+    scale(${({ theme }) => theme.inactiveScale});
 `
 
-const ACTIVE_BORDER = `
+const ACTIVE_BORDER = css`
   border: none;
   border-radius: 4px;
-  box-shadow: 2px 2px 10px ${dropShadow};
+  box-shadow: 2px 2px 10px ${({ theme }) => theme.dropShadow};
 `
 
 export const DisplayState = (name, props) => ({ name, ...props })
@@ -36,41 +36,31 @@ DisplayState.calculate = (index, currentIndex) => {
 
 Object.entries({
   BURIED: {
-    lightBoxStyles: `
-      ${BACKGROUND_TRANSFORM}
+    lightBoxStyles: css`
       display: none;
-    `,
-    previewStyles: ``
+      ${BACKGROUND_TRANSFORM}
+    `
   },
 
   BACKGROUND: {
-    lightBoxStyles: `
+    lightBoxStyles: css`
       ${BACKGROUND_TRANSFORM}
-    `,
-    previewStyles: `
-      opacity: 100;
     `
   },
 
   ACTIVE: {
-    lightBoxStyles: `
+    lightBoxStyles: css`
       transform: translate3d(0, 0, 0);
       ${ACTIVE_BORDER}
-    `,
-    previewStyles: `
-      opacity: 0;
     `
   },
 
   HIDDEN: {
-    lightBoxStyles: `
+    lightBoxStyles: css`
       pointer-events: none;
       transform: translate3d(0, 0, 0);
       opacity: 0;
       ${ACTIVE_BORDER}
-    `,
-    previewStyles: `
-      opacity: 100;
     `
   }
 // eslint-disable-next-line no-return-assign

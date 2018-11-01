@@ -7,25 +7,26 @@
 
 import PropTypes from 'prop-types'
 import React from 'react'
+import { setMode } from '../Theme'
 import HeapComponent, { HEAP_SHAPE } from './Heap'
 import HeapLoader from './HeapLoader'
 import Navigation from './Navigation'
 
 const HeapWithConfig = props => {
-  const { config, className, children } = props
+  const { config, className, children, mode } = props
   if (props.navigation != null) {
     const { navigation, currentCardPath } = props
-    return <HeapComponent {...{ config, className, navigation, currentCardPath, children }} />
+    return <HeapComponent {...{ config, mode, className, navigation, currentCardPath, children }} />
   } else {
     return <Navigation basePath={props.basePath}>{ ({ navigation, currentCardPath }) =>
-      <HeapComponent {...{ config, className, navigation, currentCardPath, children }} />
+      <HeapComponent {...{ config, mode, className, navigation, currentCardPath, children }} />
     }</Navigation>
   }
 }
 
 const Heap = props => {
-  const { src, heap } = props
-  const childProps = { ...props, src: undefined, heap: undefined }
+  const { src, heap, ...childProps } = props
+  setMode(props.mode)
   if (heap != null) {
     return <HeapWithConfig config={heap} {...childProps} />
   } else if (src != null) {
@@ -43,6 +44,8 @@ Heap.propTypes = {
   src: PropTypes.string,
   heap: HEAP_SHAPE,
 
+  mode: PropTypes.oneOf(['story', 'screensaver']),
+
   className: PropTypes.string,
 
   basePath: PropTypes.string,
@@ -52,6 +55,10 @@ Heap.propTypes = {
     replace: PropTypes.func.isRequired
   }),
   currentCardPath: PropTypes.string
+}
+
+Heap.defaultProps = {
+  mode: 'story'
 }
 
 export default Heap

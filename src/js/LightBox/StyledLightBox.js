@@ -8,14 +8,13 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
-import { transitionDuration, backgroundImageBorder, lightBoxBackground } from '../styleConstants'
 
 const StyledLightBox = styled.div`
   transform-origin: center;
-  border: 2px solid ${backgroundImageBorder};
+  border: 2px solid ${({ theme }) => theme.backgroundImageBorder};
   border-radius: 10px;
   padding: 10px 10px 0 10px;
-  background: ${lightBoxBackground};
+  background: ${({ theme }) => theme.lightBoxBackground};
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -23,8 +22,8 @@ const StyledLightBox = styled.div`
   align-items: center;
   
   transition: 
-    opacity ${transitionDuration}ms ease-in-out, 
-    transform ${transitionDuration}ms ease-in-out;
+    opacity ${({ theme }) => theme.transitionDuration}ms ease-in-out, 
+    transform ${({ theme }) => theme.transitionDuration}ms ease-in-out;
   
   > :first-child {
     margin-bottom: 4px;

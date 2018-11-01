@@ -12,7 +12,7 @@ import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { DisplayState } from './DisplayState'
 import Loading from './Loading'
-import { fadeDuration } from './styleConstants'
+import { getTheme, UseTheme } from './Theme'
 
 const LIGHT_BOX_MARGIN = 300
 const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`
@@ -81,12 +81,12 @@ const StyledLightBoxImage = styled.img`
   
   &.${FADE.IN} {
     opacity: 0;
-    animation: ${imageFade} ${fadeDuration}ms ease-in-out;
+    animation: ${imageFade} ${({ theme }) => theme.fadeDuration}ms ease-in-out;
     animation-fill-mode: forwards;
   }
   
   &.${FADE.OUT} {
-    animation: ${imageFade} ${fadeDuration}ms ease-in-out reverse;
+    animation: ${imageFade} ${({ theme }) => theme.fadeDuration}ms ease-in-out reverse;
     animation-fill-mode: forwards;
   }
 `
@@ -136,7 +136,7 @@ export default class LightBoxImage extends Component {
   fade (direction) {
     this.clearTimer()
     this.setState({ fading: direction })
-    this._fadeTimer = setTimeout(() => this.setState({ fading: null }), fadeDuration)
+    this._fadeTimer = setTimeout(() => this.setState({ fading: null }), getTheme().fadeDuration)
   }
 
   clearTimer () {
@@ -162,18 +162,13 @@ export default class LightBoxImage extends Component {
     const { preview, displayState, srcSet, sizes, ...childProps } = this.props
     const { fading } = this.state
 
-    let image = null
+    let useImage = false
     let loading = null
     if (displayState === DisplayState.ACTIVE || fading === FADE.OUT) {
       if (this.state.loading) {
         loading = <Loading />
       } else {
-        image = <StyledLightBoxImage
-          className={fading}
-          {...childProps}
-          srcSet={srcSet}
-          sizes={sizes}
-        />
+        useImage = true
       }
     }
 
@@ -182,9 +177,17 @@ export default class LightBoxImage extends Component {
       containerStyles = { background: `url(data:image/svg+xml;base64,${preview})` }
     }
 
-    return <LightBoxImageContainer {...childProps} style={containerStyles}>
-      { image }
-      { loading }
-    </LightBoxImageContainer>
+    return <UseTheme>{ theme =>
+      <LightBoxImageContainer {...childProps} style={containerStyles}>
+        { useImage && <StyledLightBoxImage
+          theme={theme}
+          className={fading}
+          {...childProps}
+          srcSet={srcSet}
+          sizes={sizes}
+        /> }
+        { loading }
+      </LightBoxImageContainer>
+    }</UseTheme>
   }
 }

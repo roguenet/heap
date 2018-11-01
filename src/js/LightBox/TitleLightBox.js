@@ -5,12 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import Remarkable from 'remarkable'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import Remarkable from 'remarkable'
 import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
 import { Description, Title } from '../Text'
+import { UseTheme } from '../Theme'
 import StyledLightBox from './StyledLightBox'
 
 const StyledTitleBox = styled.div`
@@ -56,22 +57,25 @@ export default class TitleLightBox extends Component {
 
   render () {
     const { title, description, displayState, rotation, offsetX, offsetY } = this.props
-    return <StyledLightBox
-      displayState={displayState}
-      onClick={this.maybeSwallowEvent}
-      style={{
-        '--rotation': `${rotation}deg`,
-        '--offsetX': offsetX,
-        '--offsetY': offsetY
-      }}
-    >
-      <StyledTitleBox>
-        <Title className='heap-lightBoxTitle'>{ title }</Title>
-        <Description
-          className='heap-lightBoxDescription'
-          dangerouslySetInnerHTML={{ __html: md.render(description) }}
-        />
-      </StyledTitleBox>
-    </StyledLightBox>
+    return <UseTheme>{ theme =>
+      <StyledLightBox
+        theme={theme}
+        displayState={displayState}
+        onClick={this.maybeSwallowEvent}
+        style={{
+          '--rotation': `${rotation}deg`,
+          '--offsetX': offsetX,
+          '--offsetY': offsetY
+        }}
+      >
+        <StyledTitleBox>
+          <Title className='heap-lightBoxTitle'>{ title }</Title>
+          <Description
+            className='heap-lightBoxDescription'
+            dangerouslySetInnerHTML={{ __html: md.render(description) }}
+          />
+        </StyledTitleBox>
+      </StyledLightBox>
+    }</UseTheme>
   }
 }

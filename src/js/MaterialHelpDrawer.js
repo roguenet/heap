@@ -21,7 +21,7 @@ import PropTypes from 'prop-types'
 import React, { Component, Fragment } from 'react'
 import JssProvider from 'react-jss/lib/JssProvider'
 import styled from 'styled-components'
-import { drawerBackground, dropShadow, lightBoxBackground } from './styleConstants'
+import { UseTheme } from './Theme'
 
 // A hack to prevent icons here and icons from our consumer to have clashing class names.
 // https://material-ui.com/customization/css-in-js/#creategenerateclassname-options-class-name-generator
@@ -43,7 +43,7 @@ const StyledControlDrawer = styled.div`
   border-radius: 37px;
   
   transition: background 350ms ease-out;
-  background: ${({ active }) => active ? drawerBackground : 'none'};
+  background: ${({ active, theme }) => active ? theme.drawerBackground : 'none'};
 `
 
 const StyledHelpPanel = styled.div`
@@ -56,8 +56,8 @@ const StyledHelpPanel = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow: ${({ active }) => active ? `2px 2px 10px ${dropShadow}` : 'none'};
-  background: ${lightBoxBackground};
+  box-shadow: ${({ active, theme }) => active ? `2px 2px 10px ${theme.dropShadow}` : 'none'};
+  background: ${({ theme }) => theme.lightBoxBackground};
   
   transition: background 350ms ease-out;
   background: ${({ active }) => active ? 'white' : 'none'};
@@ -198,53 +198,56 @@ export default class MaterialHelpDrawer extends Component {
     } = this.props
     const isPhoto = card.cardType === 'photo'
 
-    return <JssProvider generateClassName={generateClassName}>
-      <Fragment>
-        <StyledHelpPanel active={helpActive} onClick={this.swallowEvent}>
-          <DrawerButton
-            style={{ position: helpActive ? 'absolute' : null }}
-            onClick={this.toggleHelpActive}
-          >
-            { helpActive ? <CloseIcon style={{ position: 'absolute' }} /> : <HelpIcon /> }
-          </DrawerButton>
-          { helpActive && <HelpPanel
-            imagesCopyright={config.copyright}
-            additionalControlsHelp={additionalControlsHelp}
-          /> }
-        </StyledHelpPanel>
-        <StyledControlDrawer active={controlsActive} onClick={this.swallowEvent}>
-          <DrawerButton tooltip='Toggle controls' onClick={this.toggleControlsActive}>
-            <MoreIcon />
-          </DrawerButton>
-          { controlsActive && <Fragment>
-            <Divider />
-            <DrawerButton disabled={isFirst} onClick={first}><FirstPageIcon /></DrawerButton>
-            <DrawerButton disabled={isFirst} onClick={back}><ArrowBackIcon /></DrawerButton>
-            <DrawerButton disabled={isLast} onClick={forward}><ArrowForwardIcon /></DrawerButton>
-            <DrawerButton disabled={isLast} onClick={last}><LastPageIcon /></DrawerButton>
-            <Divider />
+    return <UseTheme>{ theme =>
+      <JssProvider generateClassName={generateClassName}>
+        <Fragment>
+          <StyledHelpPanel theme={theme} active={helpActive} onClick={this.swallowEvent}>
             <DrawerButton
-              disabled={!isPhoto}
-              onClick={this.downloadImage}
-              tooltip='Download this image'
+              style={{ position: helpActive ? 'absolute' : null }}
+              onClick={this.toggleHelpActive}
             >
-              <ImageDownloadIcon />
+              { helpActive ? <CloseIcon style={{ position: 'absolute' }} /> : <HelpIcon /> }
             </DrawerButton>
-            <DrawerButton
-              onClick={this.downloadArchive}
-              tooltip='Download entire archive'
-            ><ArchiveDownloadIcon /></DrawerButton>
-            { additionalControls && <Fragment>
+            { helpActive && <HelpPanel
+              imagesCopyright={config.copyright}
+              additionalControlsHelp={additionalControlsHelp}
+            /> }
+          </StyledHelpPanel>
+          <StyledControlDrawer theme={theme} active={controlsActive} onClick={this.swallowEvent}>
+            <DrawerButton tooltip='Toggle controls' onClick={this.toggleControlsActive}>
+              <MoreIcon />
+            </DrawerButton>
+            { controlsActive && <Fragment>
               <Divider />
-              { additionalControls.map(({ onClick, icon, tooltip }, index) => <DrawerButton
-                key={index}
-                onClick={onClick}
-                tooltip={tooltip}
-              >{ icon }</DrawerButton>) }
+              <DrawerButton disabled={isFirst} onClick={first}><FirstPageIcon /></DrawerButton>
+              <DrawerButton disabled={isFirst} onClick={back}><ArrowBackIcon /></DrawerButton>
+              <DrawerButton disabled={isLast}
+                onClick={forward}><ArrowForwardIcon /></DrawerButton>
+              <DrawerButton disabled={isLast} onClick={last}><LastPageIcon /></DrawerButton>
+              <Divider />
+              <DrawerButton
+                disabled={!isPhoto}
+                onClick={this.downloadImage}
+                tooltip='Download this image'
+              >
+                <ImageDownloadIcon />
+              </DrawerButton>
+              <DrawerButton
+                onClick={this.downloadArchive}
+                tooltip='Download entire archive'
+              ><ArchiveDownloadIcon /></DrawerButton>
+              { additionalControls && <Fragment>
+                <Divider />
+                { additionalControls.map(({ onClick, icon, tooltip }, index) => <DrawerButton
+                  key={index}
+                  onClick={onClick}
+                  tooltip={tooltip}
+                >{ icon }</DrawerButton>) }
+              </Fragment> }
             </Fragment> }
-          </Fragment> }
-        </StyledControlDrawer>
-      </Fragment>
-    </JssProvider>
+          </StyledControlDrawer>
+        </Fragment>
+      </JssProvider>
+    }</UseTheme>
   }
 }

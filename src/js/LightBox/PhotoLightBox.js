@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
 import LightBoxImage, { copySize } from '../LightBoxImage'
 import { Copyright, Description, Title } from '../Text'
+import { UseTheme } from '../Theme'
 import StyledLightBox from './StyledLightBox'
 
 const CopyContainer = styled.div`
@@ -77,31 +78,34 @@ export default class PhotoLightBox extends Component {
 
     const { width, height, preview, displayState, meta, rotation, offsetX, offsetY } = this.props
     const buried = displayState === DisplayState.BURIED
-    return <StyledLightBox
-      displayState={displayState}
-      style={{
-        '--rotation': `${rotation}deg`,
-        '--offsetX': offsetX,
-        '--offsetY': offsetY
-      }}
-    >
-      { !buried && <LightBoxImage
+    return <UseTheme>{ theme =>
+      <StyledLightBox
+        theme={theme}
         displayState={displayState}
-        srcSet={this.fullSrcSet()}
-        sizes={this.sizes()}
-        imageWidth={width}
-        imageHeight={height}
-        preview={preview}
-      /> }
-      <CopyContainer imageWidth={width} imageHeight={height}>
-        { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
-        { meta.description && <Description className='heap-lightBoxDescription'>{
-          meta.description
-        }</Description> }
-        { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
-          &copy; { meta.copyright }
-        </Copyright> }
-      </CopyContainer>
-    </StyledLightBox>
+        style={{
+          '--rotation': `${rotation}deg`,
+          '--offsetX': offsetX,
+          '--offsetY': offsetY
+        }}
+      >
+        { !buried && <LightBoxImage
+          displayState={displayState}
+          srcSet={this.fullSrcSet()}
+          sizes={this.sizes()}
+          imageWidth={width}
+          imageHeight={height}
+          preview={preview}
+        /> }
+        <CopyContainer imageWidth={width} imageHeight={height}>
+          { meta.title && <Title className='heap-lightBoxTitle'>{ meta.title }</Title> }
+          { meta.description && <Description className='heap-lightBoxDescription'>{
+            meta.description
+          }</Description> }
+          { this.showCopyright && <Copyright className='heap-lightBoxCopyright'>
+            &copy; { meta.copyright }
+          </Copyright> }
+        </CopyContainer>
+      </StyledLightBox>
+    }</UseTheme>
   }
 }
