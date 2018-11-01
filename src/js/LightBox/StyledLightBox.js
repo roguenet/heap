@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DisplayState } from '../DisplayState'
-import { animationDuration, backgroundImageBorder, lightBoxBackground } from '../styleConstants'
+import { transitionDuration, backgroundImageBorder, lightBoxBackground } from '../styleConstants'
 
 const StyledLightBox = styled.div`
   transform-origin: center;
@@ -23,8 +23,8 @@ const StyledLightBox = styled.div`
   align-items: center;
   
   transition: 
-    opacity ${animationDuration}ms ease-in-out, 
-    transform ${animationDuration}ms ease-in-out;
+    opacity ${transitionDuration}ms ease-in-out, 
+    transform ${transitionDuration}ms ease-in-out;
   
   > :first-child {
     margin-bottom: 4px;

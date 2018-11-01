@@ -14,4 +14,5 @@ export const dropShadow = '#5f524f'
 
 export const activeScale = 1.8
 export const inactiveScale = 1 / activeScale
-export const animationDuration = 300
+export const transitionDuration = 300
+export const fadeDuration = 600

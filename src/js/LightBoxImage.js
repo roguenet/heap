@@ -9,10 +9,10 @@
 
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { DisplayState } from './DisplayState'
 import Loading from './Loading'
-import { animationDuration, lightBoxBorder } from './styleConstants'
+import { fadeDuration, lightBoxBorder } from './styleConstants'
 
 const LIGHT_BOX_MARGIN = 300
 const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`
@@ -54,25 +54,34 @@ const LightBoxImageContainer = styled.div`
   border: 1px solid ${lightBoxBorder};
   ${imageSize};
   position: relative;
+  background-size: cover;
+`
+
+const imageFade = keyframes`
+  0% {
+    opacity: 0;
+  }
+  
+  100% {
+    opacity: 100;
+  }
 `
 
 const StyledLightBoxImage = styled.img`
   position: absolute;
   left: 0;
-  right: 0;
   top: 0;
-  bottom: 0;
-`
-
-const StyledLightBoxPreview = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-size: cover;
-  transition: opacity ${animationDuration * 2}ms ease-in-out;
-  ${({ displayState }) => displayState.previewStyles}
+  
+  &.fadeIn {
+    opacity: 0;
+    animation: ${imageFade} ${fadeDuration}ms ease-in-out;
+    animation-fill-mode: forwards;
+  }
+  
+  &.fadeOut {
+    animation: ${imageFade} ${fadeDuration}ms ease-in-out reverse;
+    animation-fill-mode: forwards;
+  }
 `
 
 export default class LightBoxImage extends Component {
@@ -86,17 +95,42 @@ export default class LightBoxImage extends Component {
   }
 
   state = {
-    loading: true
+    loading: true,
+    fadingIn: false,
+    fadingOut: false
   }
 
   componentDidMount () {
     this.loadImage()
   }
 
-  componentDidUpdate ({ srcSet }) {
+  componentDidUpdate ({ srcSet, displayState }) {
     if (srcSet !== this.props.srcSet) {
       this.setState({ loading: true })
       this.loadImage()
+    }
+
+    if (displayState !== this.props.displayState) {
+      if (this.props.displayState === DisplayState.ACTIVE) {
+        this.setState({ fadingIn: true, fadingOut: false })
+        this.clearTimer()
+        this._fadeTimer = setTimeout(() => this.setState({ fadingIn: false }), fadeDuration)
+      } else if (displayState === DisplayState.ACTIVE) {
+        this.setState({ fadingOut: true, fadingIn: false })
+        this.clearTimer()
+        this._fadeTimer = setTimeout(() => this.setState({ fadingOut: false }), fadeDuration)
+      }
+    }
+  }
+
+  componentWillUnmount () {
+    this.clearTimer()
+  }
+
+  clearTimer () {
+    if (this._fadeTimer != null) {
+      clearTimeout(this._fadeTimer)
+      this._fadeTimer = null
     }
   }
 
@@ -109,29 +143,33 @@ export default class LightBoxImage extends Component {
 
   render () {
     const { preview, displayState, srcSet, sizes, ...childProps } = this.props
-
-    let previewBox = null
-    if (preview != null) {
-      previewBox = <StyledLightBoxPreview
-        {...childProps}
-        displayState={this.state.loading ? DisplayState.BACKGROUND : displayState}
-        style={{ background: `url(data:image/svg+xml;base64,${preview})` }}
-      />
-    }
+    const { fadingIn, fadingOut } = this.state
 
     let image = null
-    if (!this.state.loading && displayState === DisplayState.ACTIVE) {
-      image = <StyledLightBoxImage {...childProps} srcSet={srcSet} sizes={sizes} />
-    }
-
     let loading = null
-    if (this.state.loading && displayState === DisplayState.ACTIVE) {
-      loading = <Loading />
+    if (displayState === DisplayState.ACTIVE || fadingOut) {
+      if (this.state.loading) {
+        loading = <Loading />
+      } else {
+        let className = null
+        if (fadingIn) className = 'fadeIn'
+        else if (fadingOut) className = 'fadeOut'
+        image = <StyledLightBoxImage
+          className={className}
+          {...childProps}
+          srcSet={srcSet}
+          sizes={sizes}
+        />
+      }
     }
 
-    return <LightBoxImageContainer {...childProps}>
+    let containerStyles = null
+    if (preview != null) {
+      containerStyles = { background: `url(data:image/svg+xml;base64,${preview})` }
+    }
+
+    return <LightBoxImageContainer {...childProps} style={containerStyles}>
       { image }
-      { previewBox }
       { loading }
     </LightBoxImageContainer>
   }
