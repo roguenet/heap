@@ -12,7 +12,7 @@ import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { DisplayState } from './DisplayState'
 import Loading from './Loading'
-import { fadeDuration, lightBoxBorder } from './styleConstants'
+import { fadeDuration } from './styleConstants'
 
 const LIGHT_BOX_MARGIN = 300
 const IMAGE_WIDTH = `100vw - ${LIGHT_BOX_MARGIN}px`
@@ -51,10 +51,10 @@ export const copySize = ({ imageWidth, imageHeight }) => imageWidth > imageHeigh
 
 const LightBoxImageContainer = styled.div`
   border-radius: 4px;
-  border: 1px solid ${lightBoxBorder};
   ${imageSize};
   position: relative;
   background-size: cover;
+  transform: translate3d(0, 0, 0);
 `
 
 const imageFade = keyframes`
@@ -67,18 +67,25 @@ const imageFade = keyframes`
   }
 `
 
+const FADE = {
+  IN: 'fadeIn',
+  OUT: 'fadeOut'
+}
+
 const StyledLightBoxImage = styled.img`
+  border-radius: 4px;
   position: absolute;
   left: 0;
   top: 0;
+  transform: translate3d(0, 0, 0);
   
-  &.fadeIn {
+  &.${FADE.IN} {
     opacity: 0;
     animation: ${imageFade} ${fadeDuration}ms ease-in-out;
     animation-fill-mode: forwards;
   }
   
-  &.fadeOut {
+  &.${FADE.OUT} {
     animation: ${imageFade} ${fadeDuration}ms ease-in-out reverse;
     animation-fill-mode: forwards;
   }
@@ -96,8 +103,7 @@ export default class LightBoxImage extends Component {
 
   state = {
     loading: true,
-    fadingIn: false,
-    fadingOut: false
+    fading: null
   }
 
   componentDidMount () {
@@ -105,26 +111,32 @@ export default class LightBoxImage extends Component {
   }
 
   componentDidUpdate ({ srcSet, displayState }) {
+    let loading = false
     if (srcSet !== this.props.srcSet) {
-      this.setState({ loading: true })
+      loading = true
+      this.setState({ loading })
       this.loadImage()
     }
 
     if (displayState !== this.props.displayState) {
       if (this.props.displayState === DisplayState.ACTIVE) {
-        this.setState({ fadingIn: true, fadingOut: false })
-        this.clearTimer()
-        this._fadeTimer = setTimeout(() => this.setState({ fadingIn: false }), fadeDuration)
+        if (!this.state.loading && !loading) {
+          this.fade(FADE.IN)
+        }
       } else if (displayState === DisplayState.ACTIVE) {
-        this.setState({ fadingOut: true, fadingIn: false })
-        this.clearTimer()
-        this._fadeTimer = setTimeout(() => this.setState({ fadingOut: false }), fadeDuration)
+        this.fade(FADE.OUT)
       }
     }
   }
 
   componentWillUnmount () {
     this.clearTimer()
+  }
+
+  fade (direction) {
+    this.clearTimer()
+    this.setState({ fading: direction })
+    this._fadeTimer = setTimeout(() => this.setState({ fading: null }), fadeDuration)
   }
 
   clearTimer () {
@@ -134,28 +146,30 @@ export default class LightBoxImage extends Component {
     }
   }
 
+  onLoad = () => {
+    this.setState({ loading: false })
+    if (this.props.displayState === DisplayState.ACTIVE) this.fade(FADE.IN)
+  }
+
   loadImage () {
     const img = new Image()
-    img.onload = () => this.setState({ loading: false })
+    img.onload = this.onLoad
     img.sizes = this.props.sizes
     img.srcset = this.props.srcSet
   }
 
   render () {
     const { preview, displayState, srcSet, sizes, ...childProps } = this.props
-    const { fadingIn, fadingOut } = this.state
+    const { fading } = this.state
 
     let image = null
     let loading = null
-    if (displayState === DisplayState.ACTIVE || fadingOut) {
+    if (displayState === DisplayState.ACTIVE || fading === FADE.OUT) {
       if (this.state.loading) {
         loading = <Loading />
       } else {
-        let className = null
-        if (fadingIn) className = 'fadeIn'
-        else if (fadingOut) className = 'fadeOut'
         image = <StyledLightBoxImage
-          className={className}
+          className={fading}
           {...childProps}
           srcSet={srcSet}
           sizes={sizes}

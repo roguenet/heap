@@ -10,7 +10,7 @@ import { dropShadow, inactiveScale } from './styleConstants'
 
 const BACKGROUND_TRANSFORM = `
   transform: 
-    translate3D(
+    translate3d(
       calc(var(--offsetX) * 100vw),
       calc(var(--offsetY) * 100vh),
       0
@@ -54,7 +54,7 @@ Object.entries({
 
   ACTIVE: {
     lightBoxStyles: `
-      transform: translate3D(0, 0, 0);
+      transform: translate3d(0, 0, 0);
       ${ACTIVE_BORDER}
     `,
     previewStyles: `
@@ -65,7 +65,7 @@ Object.entries({
   HIDDEN: {
     lightBoxStyles: `
       pointer-events: none;
-      transform: translate3D(0, 0, 0);
+      transform: translate3d(0, 0, 0);
       opacity: 0;
       ${ACTIVE_BORDER}
     `,
