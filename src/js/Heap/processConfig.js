@@ -59,7 +59,7 @@ export const screensaverModeCards = (cards, iteration = 0) =>
   // for screensaver mode, we use the same placement algorithm as story mode, but we don't show
   // any title cards and the order is scrambled
   storyModeCards(shuffle(cards.filter(({ cardType }) => cardType === 'photo'))).map(
-    card => ({ ...card, path: `${card.path}${iteration}` })
+    card => ({ ...card, path: `${card.path}-${iteration}` })
   )
 
 const cardsForMode = (mode, cards) => {

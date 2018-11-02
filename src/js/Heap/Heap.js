@@ -18,7 +18,7 @@ import { processConfig, screensaverModeCards } from './processConfig'
 // for processConfig's bucket generation algorithm
 export const MAX_BACKGROUND = 36
 
-export const SCREENSAVER_MIN_TIME = 5000
+export const SCREENSAVER_MIN_TIME = 8000
 export const SCREENSAVER_MAX_TIME = 10000
 const screensaverNavTimeout = () =>
   Math.random() * (SCREENSAVER_MAX_TIME - SCREENSAVER_MIN_TIME) + SCREENSAVER_MIN_TIME
@@ -116,17 +116,20 @@ export default class Heap extends Component {
   }
 
   componentDidUpdate ({ currentCardPath: previousCardPath }) {
-    const { currentCardPath, navigation } = this.props
+    const { mode, currentCardPath, navigation } = this.props
     const pathChanged = currentCardPath !== previousCardPath
     if (pathChanged) {
       if (currentCardPath == null || !this.cardPathIsValid(currentCardPath)) {
         navigation.replace(this.cards[0].path)
-      } else if (this.cards.length - this.currentIndex < MAX_BACKGROUND) {
+      } else if (
+        mode === 'screensaver' &&
+        this.cards.length - this.currentIndex < MAX_BACKGROUND
+      ) {
         const iteration = this.state.iteration + 1
         const config = {
           ...this.state.config,
           cards: [
-            ...this.cards,
+            ...this.cards.slice(Math.max(0, this.currentIndex - 1)),
             ...screensaverModeCards(this.props.config.cards, iteration)
           ]
         }
@@ -200,10 +203,14 @@ export default class Heap extends Component {
     }
 
     let controls
-    if (mode === 'story' && children) controls = children(navigator, cardContext)
+    let onClick
+    if (mode === 'story' && children) {
+      controls = children(navigator, cardContext)
+      onClick = this.goForward
+    }
 
     return <UseTheme>{ theme =>
-      <StyledHeap theme={theme} className={this.props.className} onClick={this.goForward}>
+      <StyledHeap theme={theme} className={this.props.className} onClick={onClick}>
         { [...config.cards].reverse().map(this.renderLightBox) }
         { controls }
       </StyledHeap>
