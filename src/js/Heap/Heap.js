@@ -204,7 +204,7 @@ export default class Heap extends Component {
 
     let controls
     let onClick
-    if (mode === 'story' && children) {
+    if (mode === 'story' && children != null) {
       controls = children(navigator, cardContext)
       onClick = this.goForward
     }
