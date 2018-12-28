@@ -17,6 +17,7 @@ import LastPageIcon from '@material-ui/icons/LastPage'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import ArchiveDownloadIcon from '@material-ui/icons/PhotoLibraryOutlined'
 import ImageDownloadIcon from '@material-ui/icons/PhotoOutlined'
+import isString from 'lodash/isString'
 import PropTypes from 'prop-types'
 import React, { Component, Fragment } from 'react'
 import JssProvider from 'react-jss/lib/JssProvider'
@@ -135,6 +136,15 @@ const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
   { imagesCopyright && <sub>All Images &copy; { imagesCopyright }</sub> }
 </Fragment>
 
+const sizeString = size => ['B', 'KB', 'MB', 'GB', 'TB'].reduce((value, label) => {
+  if (isString(value)) return value
+
+  if (value > 1024 * 0.8) return value / 1024
+  else if (value > 100) return `${Math.round(value)} ${label}`
+  else if (value > 10) return `${value.toFixed(1)} ${label}`
+  else return `${value.toFixed(2)} ${label}`
+}, size)
+
 export default class MaterialHelpDrawer extends Component {
   static propTypes = {
     navigate: PropTypes.shape({
@@ -198,6 +208,15 @@ export default class MaterialHelpDrawer extends Component {
     } = this.props
     const isPhoto = card.cardType === 'photo'
 
+    let downloadImageLabel = 'Download this image'
+    const imageSize = isPhoto ? card.sources[card.sources.length - 1].size : null
+    if (imageSize != null) downloadImageLabel = `${downloadImageLabel} (${sizeString(imageSize)}`
+
+    let downloadArchiveLabel = 'Download entire archive'
+    if (config.archiveSize != null) {
+      downloadArchiveLabel = `${downloadArchiveLabel} (${sizeString(config.archiveSize)})`
+    }
+
     return <UseTheme>{ theme =>
       <JssProvider generateClassName={generateClassName}>
         <Fragment>
@@ -228,13 +247,13 @@ export default class MaterialHelpDrawer extends Component {
               <DrawerButton
                 disabled={!isPhoto}
                 onClick={this.downloadImage}
-                tooltip='Download this image'
+                tooltip={downloadImageLabel}
               >
                 <ImageDownloadIcon />
               </DrawerButton>
               <DrawerButton
                 onClick={this.downloadArchive}
-                tooltip='Download entire archive'
+                tooltip={downloadArchiveLabel}
               ><ArchiveDownloadIcon /></DrawerButton>
               { additionalControls && <Fragment>
                 <Divider />
