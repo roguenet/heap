@@ -36,6 +36,7 @@ export const HEAP_SHAPE = PropTypes.shape({
   copyright: PropTypes.string,
   copyrightCovers: PropTypes.arrayOf(PropTypes.string),
   archiveUrl: PropTypes.string,
+  archiveSize: PropTypes.number,
   cards: PropTypes.arrayOf(PropTypes.oneOfType([
     // photo card
     PropTypes.exact({
@@ -52,7 +53,8 @@ export const HEAP_SHAPE = PropTypes.shape({
         title: PropTypes.string,
         description: PropTypes.string,
         copyright: PropTypes.string
-      })
+      }),
+      size: PropTypes.number
     }),
 
     // title card
