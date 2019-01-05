@@ -1,7 +1,7 @@
 #!/usr/bin/env node --experimental-modules
 
 /**
- * Copyright (c) 2018 Nathan Curtis
+ * Copyright (c) 2018-2019 Nathan Curtis
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
