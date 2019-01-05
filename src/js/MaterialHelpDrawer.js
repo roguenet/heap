@@ -132,7 +132,7 @@ const HelpPanel = ({ imagesCopyright, additionalControlsHelp }) => <Fragment>
     </ul>
     <p>Enjoy!</p>
   </div>
-  <sub>Heap &copy; 2018 Nathan Curtis</sub>
+  <sub>Heap &copy; 2018-2019 Nathan Curtis</sub>
   { imagesCopyright && <sub>All Images &copy; { imagesCopyright }</sub> }
 </Fragment>
 
