@@ -47,14 +47,14 @@ export const HEAP_SHAPE = PropTypes.shape({
       preview: PropTypes.string,
       sources: PropTypes.arrayOf(PropTypes.exact({
         src: PropTypes.string.isRequired,
-        width: PropTypes.number.isRequired
+        width: PropTypes.number.isRequired,
+        size: PropTypes.number
       })),
       meta: PropTypes.shape({
         title: PropTypes.string,
         description: PropTypes.string,
         copyright: PropTypes.string
-      }),
-      size: PropTypes.number
+      })
     }),
 
     // title card
