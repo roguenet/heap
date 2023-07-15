@@ -15,8 +15,11 @@ async function run () {
   Yargs
     .usage('$0 <cmd> [args]')
 
+    .command(await import('../lib/commands/info'))
     .command(await import('../lib/commands/importImages'))
     .command(await import('../lib/commands/exportHeap'))
+    .command(await import('../lib/commands/setRemoteAws'))
+    .command(await import('../lib/commands/setCdnPrefix'))
 
     .option('verbose', {
       alias: 'v',
